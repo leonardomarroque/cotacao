@@ -1,0 +1,28 @@
+# configure your datasource
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: root
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/quotationdb
+  hibernate-orm:
+    database:
+      generation: update
+
+# REST client configuration
+  rest-client:
+    org.br.mineradora.client.CurrencyPriceClient:
+      url: https://economia.awesomeapi.com.br
+
+# Kafka configs
+mp:
+  messaging:
+    outgoing:
+      quotation-channel:
+        connector: smallrye-kafka
+        topic: quotation
+    connector:
+      smallrye-kafka:
+        bootstrap:
+          servers: localhost:9092
