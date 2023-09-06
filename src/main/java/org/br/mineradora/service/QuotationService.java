@@ -6,7 +6,7 @@ import org.br.mineradora.client.CurrencyPriceClient;
 import org.br.mineradora.dto.CurrencyPriceDTO;
 import org.br.mineradora.dto.QuotationDTO;
 import org.br.mineradora.entity.QuotationEntity;
-import org.br.mineradora.message.KafkaEvents;
+import org.br.mineradora.message.KafkaEvent;
 import org.br.mineradora.repository.QuotationRepository;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -25,14 +25,14 @@ public class QuotationService {
     QuotationRepository quotationRepository;
 
     @Inject
-    KafkaEvents kafkaEvents;
+    KafkaEvent kafkaEvent;
 
     public void getCurrencyPrice() {
 
         CurrencyPriceDTO currencyPriceInfo = currencyPriceClient.getPriceByPair("USD-BRL");
 
         if(updateCurrencyInfoPrice(currencyPriceInfo)) {
-            kafkaEvents.sendNewKafkaEvent(QuotationDTO
+            kafkaEvent.sendNewKafkaEvent(QuotationDTO
                     .builder()
                     .currencyPrice(new BigDecimal(currencyPriceInfo.USDBRL().bid()))
                     .date(new Date())
