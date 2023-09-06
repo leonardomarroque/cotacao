@@ -1,8 +1,7 @@
 package org.br.mineradora.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
 import org.br.mineradora.client.CurrencyPriceClient;
 import org.br.mineradora.dto.CurrencyPriceDTO;
 import org.br.mineradora.dto.QuotationDTO;
@@ -15,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Path("/teste")
+@ApplicationScoped
 public class QuotationService {
 
     @Inject
@@ -28,7 +27,6 @@ public class QuotationService {
     @Inject
     KafkaEvents kafkaEvents;
 
-    @GET
     public void getCurrencyPrice() {
 
         CurrencyPriceDTO currencyPriceInfo = currencyPriceClient.getPriceByPair("USD-BRL");
@@ -36,7 +34,7 @@ public class QuotationService {
         if(updateCurrencyInfoPrice(currencyPriceInfo)) {
             kafkaEvents.sendNewKafkaEvent(QuotationDTO
                     .builder()
-                    .currencyPrice(new BigDecimal(currencyPriceInfo.getUSDBRL().getBid()))
+                    .currencyPrice(new BigDecimal(currencyPriceInfo.USDBRL().bid()))
                     .date(new Date())
                     .build());
         }
@@ -44,7 +42,7 @@ public class QuotationService {
 
     private boolean updateCurrencyInfoPrice(CurrencyPriceDTO currencyPriceInfo) {
 
-        BigDecimal currentPrice = new BigDecimal(currencyPriceInfo.getUSDBRL().getBid());
+        BigDecimal currentPrice = new BigDecimal(currencyPriceInfo.USDBRL().bid());
         boolean updatePrice = false;
 
         List<QuotationEntity> quotationList = quotationRepository.findAll().list();
@@ -77,8 +75,8 @@ public class QuotationService {
         QuotationEntity quotation = new QuotationEntity();
 
         quotation.setDate(new Date());
-        quotation.setCurrencyPrice(new BigDecimal(currencyInfo.getUSDBRL().getBid()));
-        quotation.setPctChange(currencyInfo.getUSDBRL().getPctChange());
+        quotation.setCurrencyPrice(new BigDecimal(currencyInfo.USDBRL().bid()));
+        quotation.setPctChange(currencyInfo.USDBRL().pctChange());
         quotation.setPair("USD-BRL");
 
         quotationRepository.persist(quotation);

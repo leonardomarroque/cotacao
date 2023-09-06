@@ -1,22 +1,7 @@
 package org.br.mineradora.dto;
 
-import lombok.*;
-import lombok.extern.jackson.Jacksonized;
+import lombok.Builder;
 
-@Data
 @Builder
-@Jacksonized
-public class USDBRL {
-
-    public String code;
-    public String codein;
-    public String name;
-    public String high;
-    public String low;
-    public String varBid;
-    public String pctChange;
-    public String bid;
-    public String ask;
-    public String timestamp;
-    public String create_date;
-}
+public record USDBRL(String code, String codein, String name, String high, String low, String varBid,
+                           String pctChange, String bid, String ask, String timestamp, String create_date) {}

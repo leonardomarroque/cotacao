@@ -19,7 +19,7 @@ quarkus:
 mp:
   messaging:
     outgoing:
-      quotation-channel:
+      quotation:
         connector: smallrye-kafka
         topic: quotation
     connector:
