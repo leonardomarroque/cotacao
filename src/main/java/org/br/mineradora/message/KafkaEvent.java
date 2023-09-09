@@ -12,7 +12,7 @@ public class KafkaEvent {
 
     private final Logger LOG = LoggerFactory.getLogger(KafkaEvent.class);
 
-    @Channel("quotation")
+    @Channel("quotation-channel")
     Emitter<QuotationDTO> quotationRequestEmitter;
 
     public void sendNewKafkaEvent(QuotationDTO quotation) {
